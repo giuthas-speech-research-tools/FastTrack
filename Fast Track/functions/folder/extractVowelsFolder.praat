@@ -15,13 +15,13 @@ include utils/importFunctions.praat
 
 form Analyze formant values from labeled segments in files
 	comment Directory of sound files
-	text sound_directory ../../../test/orig_sounds
+	text sound_directory ../../../vowel_test_set/orig_sounds
 	sentence Sound_file_extension .wav
 	comment Directory of TextGrid files
-	text textGrid_directory ../../../test/orig_sounds
+	text textGrid_directory ../../../vowel_test_set/orig_sounds
 	sentence TextGrid_file_extension .TextGrid
 	comment Path of the extracted vowels directory:
-	text resultdir ../../../test/extractedVowels
+	text resultdir ../../../vowel_test_set/extractedVowels
 
 	comment: "Which tier contains segment information?"
 	positive: "Segment tier:", segment_tier

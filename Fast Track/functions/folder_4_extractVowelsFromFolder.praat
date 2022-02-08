@@ -3,11 +3,11 @@
 segment_tier = 1
 word_tier = 0
 
-sound_directory$ = "../../../test/orig_sounds"
+sound_directory$ = "../../../vowel_test_set/orig_sounds"
 sound_file_extension$ = ".wav"
-textGrid_directory$ = "../../../test/orig_sounds"
+textGrid_directory$ = "../../../vowel_test_set/orig_sounds"
 textGrid_file_extension$ = ".TextGrid"
-resultdir$ = "../../../test/extractedVowels"
+resultdir$ = "../../../vowel_test_set/extractedVowels"
 
 include utils/importFunctions.praat
 @getSettings
@@ -17,13 +17,13 @@ include utils/importFunctions.praat
 
 beginPause: "Extract vowels from sound files in folder"
 	comment: "Directory of sound files"
-	sentence: "../../../test/orig_sounds", sound_directory$
+	sentence: "../../../vowel_test_set/orig_sounds", sound_directory$
 	sentence: ".wav", sound_file_extension$
 	comment: "Directory of TextGrid files"
-	sentence: "../../../test/orig_sounds", textGrid_directory$
+	sentence: "../../../vowel_test_set/orig_sounds", textGrid_directory$
 	sentence: ".TextGrid", textGrid_file_extension$
 	comment: "Path of the extracted vowels directory:"
-	sentence: "../../../test/extractedVowels", resultdir$
+	sentence: "../../../vowel_test_set/extractedVowels", resultdir$
 
 	comment: "Which tier contains segment information?"
 	positive: "Segment tier:", segment_tier
