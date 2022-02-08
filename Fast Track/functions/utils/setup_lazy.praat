@@ -19,7 +19,7 @@ Add action command: "Sound", 0, "TextGrid", 0, "", 0, "Extract vowels with TextG
 Add action command: "Sound", 0, "TextGrid", 0, "", 0, "Set options...", "", 0, "../proc_setOptions.praat"
 
 Add action command: "Sound", 0, "", 0, "", 0, "Fast Track -", "", 0, ""
-Add action command: "Sound", 0, "", 0, "", 0, "Extract vowels from folder...", "", 0, "../file_6_extractVowelsFromFolder.praat"
+Add action command: "Sound", 0, "", 0, "", 0, "Extract vowels from folder...", "", 0, "../folder_4_extractVowelsFromFolder.praat"
 Add action command: "Sound", 0, "", 0, "", 0, "Set options...", "", 0, "../proc_setOptions.praat"
 
 Add action command: "Strings", 0, "", 0, "", 0, "Fast Track -", "", 0, ""
