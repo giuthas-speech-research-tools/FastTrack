@@ -3,12 +3,12 @@
 # saves sounds in folder$
 # requires vwlTbl, segment_tier, word_tier
 
-procedure extractVowels
+procedure extractVowels:
 
   selectObject: tg
   nIntervals = Get number of intervals: segment_tier
   segmentcount = 0
-  filecount = 0
+  output_file_count = 0
 
   selectObject: snd
   snd_duration = Get duration
@@ -144,20 +144,20 @@ procedure extractVowels
 
       if extract == 1
 
-        filecount = filecount + 1
+        output_file_count = output_file_count + 1
         selectObject: snd
         snd_small = Extract part: vowelStart - buffer, vowelEnd + buffer, "rectangular", 1, "no"
-        if filecount > 999
-          filename$ = basename$ + "_" + string$(filecount)
+        if output_file_count > 999
+          filename$ = basename$ + "_" + string$(output_file_count)
         endif
-        if filecount > 99 and filecount < 1000
-          filename$ = basename$ + "_0" + string$(filecount)
+        if output_file_count > 99 and output_file_count < 1000
+          filename$ = basename$ + "_0" + string$(output_file_count)
         endif
-        if filecount > 9 and filecount < 100
-          filename$ = basename$ + "_00" + string$(filecount)
+        if output_file_count > 9 and output_file_count < 100
+          filename$ = basename$ + "_00" + string$(output_file_count)
         endif
-        if filecount < 10
-          filename$ = basename$ + "_000" + string$(filecount)
+        if output_file_count < 10
+          filename$ = basename$ + "_000" + string$(output_file_count)
         endif
 
         if maintain_separate == 1
@@ -174,11 +174,15 @@ procedure extractVowels
 
         selectObject: file_info
         Append row
-        Set string value: filecount, "file", filename$ + ".wav"
-        Set string value: filecount, "label", vowel$
-        Set numeric value: filecount, "group", spot
-        Set string value: filecount, "color", tmp_clr$
-        Set numeric value: filecount, "number", filecount
+        # Writing the last line instead of the line numbered output_file_count 
+        # so that if this is not the first file we are extracting vowels from, 
+        # data is still saved.
+        line_number = Get number of rows
+        Set string value: line_number, "file", filename$ + ".wav"
+        Set string value: line_number, "label", vowel$
+        Set numeric value: line_number, "group", spot
+        Set string value: line_number, "color", tmp_clr$
+        Set numeric value: line_number, "number", output_file_count
       endif
 
     
@@ -230,4 +234,6 @@ procedure extractVowels
 
   endfor
 
+  #appendInfoLine: "output files: ", output_file_count
+  .added_number_of_lines =  output_file_count
 endproc

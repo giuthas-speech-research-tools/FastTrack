@@ -50,6 +50,8 @@ output_folder$ = resultdir$
 Create Strings as file list: list 'sound_directory$'*'sound_file_extension$'
 numberOfFiles = Get number of strings
 
+writeInfoLine: list
+
 # Go through all the sound files.
 for ifile to numberOfFiles
 	filename$ = Get string: ifile

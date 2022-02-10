@@ -3,11 +3,11 @@
 segment_tier = 1
 word_tier = 0
 
-sound_directory$ = "../../../vowel_test_set/orig_sounds"
+sound_directory$ = "orig_sounds"
 sound_file_extension$ = ".wav"
-textGrid_directory$ = "../../../vowel_test_set/orig_sounds"
+textGrid_directory$ = "orig_sounds"
 textGrid_file_extension$ = ".TextGrid"
-resultdir$ = "../../../vowel_test_set/extractedVowels"
+resultdir$ = "extractedVowels"
 
 include utils/importFunctions.praat
 @getSettings
@@ -17,13 +17,13 @@ include utils/importFunctions.praat
 
 beginPause: "Extract vowels from sound files in folder"
 	comment: "Directory of sound files"
-	sentence: "../../../vowel_test_set/orig_sounds", sound_directory$
+	sentence: "orig_sounds", sound_directory$
 	sentence: ".wav", sound_file_extension$
 	comment: "Directory of TextGrid files"
-	sentence: "../../../vowel_test_set/orig_sounds", textGrid_directory$
+	sentence: "orig_sounds", textGrid_directory$
 	sentence: ".TextGrid", textGrid_file_extension$
 	comment: "Path of the extracted vowels directory:"
-	sentence: "../../../vowel_test_set/extractedVowels", resultdir$
+	sentence: "extractedVowels", resultdir$
 
 	comment: "Which tier contains segment information?"
 	positive: "Segment tier:", segment_tier
@@ -229,24 +229,15 @@ for ifile to numberOfFiles
 endfor
 
 
-#-------------
-# This procedure finds the number of a tier that has a given label.
+if save_segmentation_information = 1
+  selectObject: tbl
+  Save as comma-separated file: folder$ + "/" + basename$+ "_segmentation_info.csv"
+endif
 
-procedure GetTier name$ variable$
-        numberOfTiers = Get number of tiers
-        itier = 1
-        repeat
-                tier$ = Get tier name... itier
-                itier = itier + 1
-        until tier$ = name$ or itier > numberOfTiers
-        if tier$ <> name$
-                'variable$' = 0
-        else
-                'variable$' = itier - 1
-        endif
+if save_file_information = 1
+  selectObject: file_info
+  Save as comma-separated file: folder$ + "/file_information.csv"
+endif
 
-	if 'variable$' = 0
-		exit The tier called 'name$' is missing from the file 'soundname$'!
-	endif
-
-endproc
+removeObject: vwl_tbl, file_info, "Table table"
+nocheck removeObject: stresses
