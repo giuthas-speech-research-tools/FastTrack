@@ -50,7 +50,7 @@ stress = stress_is_marked_on_vowels
 output_folder$ = resultdir$
 
 glob$ = "/*" + sound_file_extension$
-Create Strings as file list: "list", sound_directory$ + glob$ 
+Create Strings as file list: "list", folder$ + sound_directory$ + glob$ 
 numberOfFiles = Get number of strings
 
 ################################################################################################
@@ -241,3 +241,10 @@ endif
 
 removeObject: vwl_tbl, file_info, "Table table"
 nocheck removeObject: stresses
+
+
+# - basename$ needs to be something more sensible, or possibly segmentation info
+#   could just be called that?
+# - need to fix this whole folder$ business. it apparently is the 'working directory'
+#   while in reality the 'working directory seems to always be where ever the 
+#   script being run is located. 
