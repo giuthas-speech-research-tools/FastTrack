@@ -3,17 +3,40 @@
 segment_tier = 1
 word_tier = 0
 
-sound_directory$ = chooseDirectory$: "Choose the sound directory"
+resultdir$ = "./"
+
+beginPause: "Choose directory for extracted vowels"
+	sentence: "Extracted vowels directory:", resultdir$
+clicked = endPause: "Ok", "Select directory...", 1
+if clicked = 2
+  resultdir$ = chooseDirectory$: "Choose the results directory"
+endif
+
+sound_directory$ = resultdir$
 sound_file_extension$ = ".wav"
-textGrid_directory$ = chooseDirectory$: "Choose the TextGrid directory"
+textGrid_directory$ = resultdir$
 textGrid_file_extension$ = ".TextGrid"
-resultdir$ = chooseDirectory$: "Choose the results directory"
+
+beginPause: "Choose the sound directory"
+	sentence: "Original sounds directory:", sound_directory$
+	sentence: ".wav", sound_file_extension$
+clicked = endPause: "Ok", "Select directory...", 1
+if clicked = 2
+  sound_directory$ = chooseDirectory$: "Choose the sound directory"
+endif
+
+beginPause: "Choose the TextGrid directory"
+	sentence: "TextGrid directory:", textGrid_directory$
+	sentence: ".TextGrid", textGrid_file_extension$
+clicked = endPause: "Ok", "Select directory...", 1
+if clicked = 2
+  textGrid_directory$ = chooseDirectory$: "Choose the TextGrid directory"
+endif
 
 include utils/importFunctions.praat
 @getSettings
 
 @getTGESettings
-
 
 beginPause: "Extract vowels from sound files in folder"
 	sentence: "Sound directory:", sound_directory$
