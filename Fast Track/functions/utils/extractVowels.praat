@@ -190,45 +190,46 @@ procedure extractVowels:
       ## write information to table
       selectObject: tbl
       Append row
-      Set string value: segmentcount, "inputfile", basename$
-      Set string value: segmentcount, "outputfile", "--"
+      line_number = Get number of rows
+      Set string value: line_number, "inputfile", basename$
+      Set string value: line_number, "outputfile", "--"
       if extract == 1
-        Set string value: segmentcount, "outputfile", filename$
+        Set string value: line_number, "outputfile", filename$
       endif
 
-      Set numeric value: segmentcount, "duration", vowelEnd-vowelStart
-      Set numeric value: segmentcount, "start", vowelStart
-      Set numeric value: segmentcount, "end", vowelEnd
-      Set string value: segmentcount, "vowel", vowel$
-      Set numeric value: segmentcount, "interval", i
-      Set string value: segmentcount, "previous_sound", previous_sound$
-      Set string value: segmentcount, "next_sound", next_sound$
+      Set numeric value: line_number, "duration", vowelEnd-vowelStart
+      Set numeric value: line_number, "start", vowelStart
+      Set numeric value: line_number, "end", vowelEnd
+      Set string value: line_number, "vowel", vowel$
+      Set numeric value: line_number, "interval", i
+      Set string value: line_number, "previous_sound", previous_sound$
+      Set string value: line_number, "next_sound", next_sound$
 
       if stress == 1
-        Set string value: segmentcount, "stress", stress$
+        Set string value: line_number, "stress", stress$
       endif
 
       omitted = (extract == 0)
-      Set numeric value: segmentcount, "omit", omitted
+      Set numeric value: line_number, "omit", omitted
 
 
       if word_tier > 0
-        Set string value: segmentcount, "word", word$
-        Set numeric value: segmentcount, "word_interval", wordNum
-        Set numeric value: segmentcount, "word_start", wordStart
-        Set numeric value: segmentcount, "word_end", wordEnd
-        Set string value: segmentcount, "previous_word", previous_word$
-        Set string value: segmentcount, "next_word", next_word$
+        Set string value: line_number, "word", word$
+        Set numeric value: line_number, "word_interval", wordNum
+        Set numeric value: line_number, "word_start", wordStart
+        Set numeric value: line_number, "word_end", wordEnd
+        Set string value: line_number, "previous_word", previous_word$
+        Set string value: line_number, "next_word", next_word$
       endif
 
       if comment_tier1 > 0
-        Set string value: segmentcount, "comment1", comment1$
+        Set string value: line_number, "comment1", comment1$
       endif
       if comment_tier2 > 0
-        Set string value: segmentcount, "comment2", comment2$
+        Set string value: line_number, "comment2", comment2$
       endif
       if comment_tier3 > 0
-        Set string value: segmentcount, "comment3", comment3$
+        Set string value: line_number, "comment3", comment3$
       endif  
     endif
 

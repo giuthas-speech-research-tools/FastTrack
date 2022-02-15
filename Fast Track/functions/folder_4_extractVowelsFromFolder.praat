@@ -3,11 +3,11 @@
 segment_tier = 1
 word_tier = 0
 
-sound_directory$ = "orig_sounds"
+sound_directory$ = chooseDirectory$: "Choose the sound directory"
 sound_file_extension$ = ".wav"
-textGrid_directory$ = "orig_sounds"
+textGrid_directory$ = chooseDirectory$: "Choose the TextGrid directory"
 textGrid_file_extension$ = ".TextGrid"
-resultdir$ = "extractedVowels"
+resultdir$ = chooseDirectory$: "Choose the results directory"
 
 include utils/importFunctions.praat
 @getSettings
@@ -16,14 +16,11 @@ include utils/importFunctions.praat
 
 
 beginPause: "Extract vowels from sound files in folder"
-	comment: "Directory of sound files"
-	sentence: "orig_sounds", sound_directory$
+	sentence: "Sound directory:", sound_directory$
 	sentence: ".wav", sound_file_extension$
-	comment: "Directory of TextGrid files"
-	sentence: "orig_sounds", textGrid_directory$
+	sentence: "TextGrid directory:", textGrid_directory$
 	sentence: ".TextGrid", textGrid_file_extension$
-	comment: "Path of the extracted vowels directory:"
-	sentence: "extractedVowels", resultdir$
+	sentence: "Extracted vowels directory:", resultdir$
 
 	comment: "Which tier contains segment information?"
 	positive: "Segment tier:", segment_tier
@@ -45,12 +42,14 @@ nocheck endPause: "Ok", 1
 
 @saveTGESettings
 
+
+
 maintain_separate = 0
 stress = stress_is_marked_on_vowels
 output_folder$ = resultdir$
 
 glob$ = "/*" + sound_file_extension$
-Create Strings as file list: "list", folder$ + sound_directory$ + glob$ 
+Create Strings as file list: "list", sound_directory$ + glob$ 
 numberOfFiles = Get number of strings
 
 ################################################################################################
@@ -196,7 +195,7 @@ endif
 createDirectory: output_folder$ + "/sounds"
 
 selectObject: "Strings list"
-# Go through all the sound files.
+# Go through the sound files, skip any that don't have a corresponding textgrid.
 for ifile to numberOfFiles
 	filename$ = Get string: ifile
 
@@ -231,12 +230,14 @@ endfor
 
 if save_segmentation_information = 1
   selectObject: tbl
-  Save as comma-separated file: folder$ + "/" + basename$+ "_segmentation_info.csv"
+  # original way of doing this:
+  # Save as comma-separated file: folder$ + "/" + basename$+ "_segmentation_info.csv"
+  Save as comma-separated file: output_folder$ + "/segmentation_info.csv"
 endif
 
 if save_file_information = 1
   selectObject: file_info
-  Save as comma-separated file: folder$ + "/file_information.csv"
+  Save as comma-separated file: output_folder$ + "/file_information.csv"
 endif
 
 removeObject: vwl_tbl, file_info, "Table table"
@@ -246,5 +247,5 @@ nocheck removeObject: stresses
 # - basename$ needs to be something more sensible, or possibly segmentation info
 #   could just be called that?
 # - need to fix this whole folder$ business. it apparently is the 'working directory'
-#   while in reality the 'working directory seems to always be where ever the 
+#   while in reality the 'working directory' seems to always be where ever the 
 #   script being run is located. 
