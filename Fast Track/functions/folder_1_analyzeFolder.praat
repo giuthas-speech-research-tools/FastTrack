@@ -120,9 +120,9 @@ if aggregate = 1
   point_size = 1.5
   draw_grid = 0
   minimum_F1 = 200
-  maximum_F1 = 1200
+  maximum_F1 = 1500
   minimum_F2 = 500
-  maximum_F2 = 3000
+  maximum_F2 = 3600
   @plotAggregate: 1
   Save as 300-dpi PNG file: folder$ + "/contours.png"
   
@@ -138,9 +138,9 @@ if aggregate = 1
   point_size = 1.5
   draw_grid = 0
   minimum_F1 = 200
-  maximum_F1 = 1200
+  maximum_F1 = 1500
   minimum_F2 = 500
-  maximum_F2 = 3000
+  maximum_F2 = 3600
   @plotAggregate: 1
   Save as 300-dpi PNG file: folder$ + "/label.png"
 
@@ -158,9 +158,9 @@ if aggregate = 1
   draw_grid = 1
   label_column$ = "number"
   minimum_F1 = 200
-  maximum_F1 = 1200
+  maximum_F1 = 1500
   minimum_F2 = 500
-  maximum_F2 = 3000
+  maximum_F2 = 3600
   @plotAggregate: 1
   Save as 300-dpi PNG file: folder$ + "/number.png"
 
