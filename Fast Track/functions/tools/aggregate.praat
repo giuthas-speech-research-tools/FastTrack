@@ -24,6 +24,7 @@ procedure aggregate autorun
     optionMenu: "Statistic", 1
   	    option: "median"
   	  	option: "mean"
+        option: "both"
     choice: "Value to collect", 1
         option: "Observed formant"
         option: "Predicted (smooth) formant"
@@ -125,32 +126,33 @@ procedure aggregate autorun
       Set numeric value: .output_counter, "cutoff", .cutoff
 
       selectObject: .tbl
-      .mf0 = Get mean: "f0"
+      .mean_f0 = Get mean: "f0"
 
-      if .mf0 > 0
+      if .mean_f0 > 0
         .tmp_tbl = Extract rows where column (number): "f0", "greater than", 0
-        .mf0 = Get mean: "f0"
-        .mf0 = round(.mf0 * 10) / 10
+        .mean_f0 = Get mean: "f0"
+        .mean_f0 = round(.mean_f0 * 10) / 10
         removeObject: .tmp_tbl
       endif    
       selectObject: .output
-      Set numeric value: .output_counter, "f0", .mf0
+      Set numeric value: .output_counter, "f0", .mean_f0
 
       column_label_append$ = ""
       if value_to_collect == 2
         column_label_append$ = "p"
       endif
       
+      # Calculate means and/or medians of formants
       if points_to_measure == 0
         for .j from 1 to number_of_bins
           selectObject: .tbl
           .tmp_tbl = Extract rows where column (number): "ntime", "equal to", .j
+          # Options are 1 = median, 2 = mean, 3 = both
           for .k from 1 to number_of_formants
-            if statistic == 2
-              .mf'.k''.j' = Get mean: "f"+string$(.k)+column_label_append$
-            endif
-            if statistic == 1
-              .mf'.k''.j' = Get quantile: "f"+string$(.k)+column_label_append$, 0.5
+            if statistic == 1 or statistic == 3
+              .median_f'.k''.j' = Get quantile: "f"+string$(.k)+column_label_append$, 0.5
+            elsif statistic == 2 or statistic == 3
+              .mean_f'.k''.j' = Get mean: "f"+string$(.k)+column_label_append$
             endif
           endfor
           removeObject: .tmp_tbl
@@ -173,21 +175,24 @@ procedure aggregate autorun
       Set string value... .output_counter file '.basename$'
       for .j from 1 to number_of_bins
         for .i from 1 to number_of_formants
-          Set numeric value... .output_counter f'.i''.j' round(.mf'.i''.j')
+          if statistic == 1 or statistic == 3
+            Set numeric value... .output_counter median_f'.i''.j' round(.median_f'.i''.j')
+          elsif statistic == 2 or statistic == 3
+            Set numeric value... .output_counter mean_f'.i''.j' round(.mean_f'.i''.j')
+          endif
         endfor
       endfor
 
-        selectObject: .file_info
-        group$ = Get value: .iii, "group"
-        label$ = Get value: .iii, "label"
-        color$ = Get value: .iii, "color"
-        number$ = Get value: .iii, "number"
-        selectObject: .output
-        Set string value: .output_counter, "group", group$
-        Set string value: .output_counter, "label", label$
-        Set string value: .output_counter, "color", color$
-        Set string value: .output_counter, "number", number$
-      endif
+      selectObject: .file_info
+      group$ = Get value: .iii, "group"
+      label$ = Get value: .iii, "label"
+      color$ = Get value: .iii, "color"
+      number$ = Get value: .iii, "number"
+      selectObject: .output
+      Set string value: .output_counter, "group", group$
+      Set string value: .output_counter, "label", label$
+      Set string value: .output_counter, "color", color$
+      Set string value: .output_counter, "number", number$
 
       nocheck removeObject: .tbl
     endif
