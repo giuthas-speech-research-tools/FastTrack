@@ -64,6 +64,11 @@ procedure plotAggregate autorun
       label_column$ = "number"
     endif
 
+    if statistic == 1 or statistic == 3
+      .stat_string$ = "median_"
+    elsif statistic == 2
+      .stat_string$ = "mean_"
+    endif
 
     if number_of_bins == 0
       number_of_bins = number(number_of_bins$)
@@ -82,7 +87,11 @@ procedure plotAggregate autorun
     if add_axes == 1
       Colour: "White"
       Font size: 14
-      Scatter plot (mark): "f21", maximum_F2, minimum_F2, "f11", maximum_F1, minimum_F1, 5, "no", plotting_symbols$
+      if statistic == 1 or statistic == 3
+        Scatter plot (mark): "median_f21", maximum_F2, minimum_F2, "median_f11", maximum_F1, minimum_F1, 5, "no", plotting_symbols$
+      elsif statistic == 2 or statistic == 3
+        Scatter plot (mark): "mean_f21", maximum_F2, minimum_F2, "mean_f11", maximum_F1, minimum_F1, 5, "no", plotting_symbols$
+      endif
       Draw inner box
       Marks bottom every: 1, 400, "yes", "yes", draw_grid
       Marks left every: 1, 200, "yes", "yes", draw_grid
@@ -117,10 +126,10 @@ procedure plotAggregate autorun
         if j > 1 and type_of_plot == 1
           oj = j - 1
           selectObject: tbl
-          y1 = Get value: i, "f1"+string$(oj)
-          y2 = Get value: i, "f1"+string$(j)
-          x1 = Get value: i, "f2"+string$(oj)
-          x2 = Get value: i, "f2"+string$(j)
+          y1 = Get value: i, .stat_string$+"f1"+string$(oj)
+          y2 = Get value: i, .stat_string$+"f1"+string$(j)
+          x1 = Get value: i, .stat_string$+"f2"+string$(oj)
+          x2 = Get value: i, .stat_string$+"f2"+string$(j)
 
           if point_size > 0
             Paint circle (mm): color_use$, x1, y1, point_size
@@ -140,8 +149,8 @@ procedure plotAggregate autorun
         ### symbol plotting
         if j == which_bin_to_plot and type_of_plot > 1
           selectObject: tbl
-          x = Get value: i, "f2"+string$(j)
-          y = Get value: i, "f1"+string$(j)
+          x = Get value: i, .stat_string$+"f2"+string$(j)
+          y = Get value: i, .stat_string$+"f1"+string$(j)
           label$ = string$(i)
 
           if plotting_symbols$ <> "--"

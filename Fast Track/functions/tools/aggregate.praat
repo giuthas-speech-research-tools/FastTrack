@@ -77,7 +77,11 @@ procedure aggregate autorun
   Append column: "cutoff"
   for j from 1 to number_of_bins
     for i from 1 to number_of_formants
-      Append column: "f"+string$(i)+string$(j)
+      if statistic == 1 or statistic == 3
+        Append column: "median_f"+string$(i)+string$(j)
+      elsif statistic == 2 or statistic == 3
+        Append column: "mean_f"+string$(i)+string$(j)
+      endif
     endfor
   endfor
    

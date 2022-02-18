@@ -57,7 +57,7 @@ beginPause: "Set Parameters"
         option: "7"
         option: "9"
         option: "11"
-    optionMenu: "Statistic", 1
+    optionMenu: "Statistic", 3
   	        option: "median"
   					option: "mean"
   					option: "both"
