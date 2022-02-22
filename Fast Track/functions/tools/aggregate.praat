@@ -68,22 +68,21 @@ procedure aggregate autorun
   ## add columns to ouput table
   Create Table with column names: "output", 0, "file"
   .output = selected ("Table")
-  Append column: "f0"
   Append column: "duration"
   Append column: "label"
   Append column: "group"
   Append column: "color"
   Append column: "number"
   Append column: "cutoff"
-  for j from 1 to number_of_bins
-    for i from 1 to number_of_formants
-      if statistic == 1 or statistic == 3
-        Append column: "median_f"+string$(i)+string$(j)
-      elsif statistic == 2 or statistic == 3
-        Append column: "mean_f"+string$(i)+string$(j)
-      endif
-    endfor
-  endfor
+  Append column: "median_f0"
+  Append column: "mean_f0"
+  # Either add median, mean or both
+  if statistic == 1 or statistic == 2 
+    @add_average_columns: statistic
+  elsif statistic == 3
+    @add_average_columns: 1
+    @add_average_columns: 2
+  endif
    
   .output_counter = 0
   for .iii from 1 to .nfiles
@@ -130,8 +129,19 @@ procedure aggregate autorun
       Set numeric value: .output_counter, "cutoff", .cutoff
 
       selectObject: .tbl
-      .mean_f0 = Get mean: "f0"
+      .median_f0 = Get quantile: "f0", 0.5
 
+      if .median_f0 > 0
+        .tmp_tbl = Extract rows where column (number): "f0", "greater than", 0
+        .median_f0 = Get quantile: "f0", 0.5
+        #.median_f0 = round(.median_f0 * 10) / 10
+        removeObject: .tmp_tbl
+      endif    
+      selectObject: .output
+      Set numeric value: .output_counter, "median_f0", .median_f0
+
+      selectObject: .tbl
+      .mean_f0 = Get mean: "f0"
       if .mean_f0 > 0
         .tmp_tbl = Extract rows where column (number): "f0", "greater than", 0
         .mean_f0 = Get mean: "f0"
@@ -139,7 +149,7 @@ procedure aggregate autorun
         removeObject: .tmp_tbl
       endif    
       selectObject: .output
-      Set numeric value: .output_counter, "f0", .mean_f0
+      Set numeric value: .output_counter, "mean_f0", .mean_f0
 
       column_label_append$ = ""
       if value_to_collect == 2
@@ -153,9 +163,12 @@ procedure aggregate autorun
           .tmp_tbl = Extract rows where column (number): "ntime", "equal to", .j
           # Options are 1 = median, 2 = mean, 3 = both
           for .k from 1 to number_of_formants
-            if statistic == 1 or statistic == 3
+            if statistic == 1 
               .median_f'.k''.j' = Get quantile: "f"+string$(.k)+column_label_append$, 0.5
-            elsif statistic == 2 or statistic == 3
+            elsif statistic == 2 
+              .mean_f'.k''.j' = Get mean: "f"+string$(.k)+column_label_append$
+            elsif statistic == 3
+              .median_f'.k''.j' = Get quantile: "f"+string$(.k)+column_label_append$, 0.5
               .mean_f'.k''.j' = Get mean: "f"+string$(.k)+column_label_append$
             endif
           endfor
@@ -163,25 +176,16 @@ procedure aggregate autorun
         endfor
       endif
 
-      #if points_to_measure == 1
-      #  for .j from 1 to number_of_bins
-      #    selectObject: .measure_points
-      #    .timepoint$ = Get string: i
-          # .timepoint = number (.timepoint$)
-      #    Formula: "point", .timepoint$
-      #    Append difference column: "time", "point", "diff"
-      #    Formula: "diff", "abs (self)"
-      # endfor
-      #  1+i
-      #endif
-
       selectObject: .output
       Set string value... .output_counter file '.basename$'
       for .j from 1 to number_of_bins
         for .i from 1 to number_of_formants
-          if statistic == 1 or statistic == 3
+          if statistic == 1 
             Set numeric value... .output_counter median_f'.i''.j' round(.median_f'.i''.j')
-          elsif statistic == 2 or statistic == 3
+          elsif statistic == 2
+            Set numeric value... .output_counter mean_f'.i''.j' round(.mean_f'.i''.j')
+          elsif statistic == 3
+            Set numeric value... .output_counter median_f'.i''.j' round(.median_f'.i''.j')
             Set numeric value... .output_counter mean_f'.i''.j' round(.mean_f'.i''.j')
           endif
         endfor
@@ -208,4 +212,17 @@ procedure aggregate autorun
 
   removeObject: .file_info
 
+endproc
+
+# median: type == 1, mean: type == 2
+procedure add_average_columns .type
+  for j from 1 to number_of_bins
+    for i from 1 to number_of_formants
+        if .type == 1
+          Append column: "median_f"+string$(i)+string$(j)
+        elsif .type == 2
+          Append column: "mean_f"+string$(i)+string$(j)
+        endif
+    endfor
+  endfor
 endproc
