@@ -1,12 +1,12 @@
-/Users/jpalo/tyot/projects/kids_vowels/F1 1001 2nd grade - COMPLETED
-8
+/Users/jpalo/tyot/projects/kids_vowels/M1 1117 4th grade COMPLETED
+24
 5
 4700
 7550
 8000
 0.002
 burg
-3
+4
 dct
 mae
-3
+1
