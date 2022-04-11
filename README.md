@@ -1,5 +1,4 @@
 
-
 <p align="center">
 <img src="https://raw.githubusercontent.com/santiagobarreda/vowelhost/main/FT-wiki/fasttrack.png?raw=true" width=630>
 </p>   
@@ -11,6 +10,15 @@
 
 Citation:
 [Barreda, S. (2021). Fast Track: fast (nearly) automatic formant-tracking using Praat. Linguistics Vanguard, 7(1)](https://doi.org/10.1515/lingvan-2020-0051)
+
+## What's different in this fork
+
+Not much, but there is an added command to extract vowels from several files in a directory. So if you happen to have a lot of short recordings 
+instead of one very long one, this addition will make life easier. All the that the direcotory needs to contain is wav files and textgrids 
+with corresponding names. Any wavs that don't have a corresponding textgrid are skipped. The tracking tools run out of the box as usual on the
+results.
+
+## Back to original README
 
 ###
 
